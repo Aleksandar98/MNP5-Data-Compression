@@ -15,12 +15,14 @@ public class Project {
 		 System.out.println("Unesite tekst za kompresiju");
 
 		 String unos = myObj.nextLine(); 
-		
-		 
+
 		 String rezultatPrvog = prvaFazaAlgoritma(unos);
 		 
 		 System.out.println(rezultatPrvog);
 
+		 String rezultatDrugog = drugaFazaAlgoritma(rezultatPrvog, table);
+		 
+		 System.out.println(rezultatDrugog);
 //		for(int i=0;i<unos.length();i++) {
 //			System.out.println(unos.charAt(i)); 
 //			findInTableAndUpdate(unos.charAt(i),table);
@@ -39,15 +41,18 @@ public class Project {
 		int brojacUzastopnihKaraktera = 0;
 		for(int i=0;i<unos.length();i++) {
 			
+			
 			if(i>0) {
 			if(unos.charAt(i)==unos.charAt(i-1)) {
 				brojacUzastopnihKaraktera++;
 				rezultat+=unos.charAt(i);
+				
+
 			}else {
 
 				if(brojacUzastopnihKaraktera >= 3) {
 					rezultat = rezultat.substring(0, rezultat.length()-brojacUzastopnihKaraktera+3);
-					rezultat+="("+brojacUzastopnihKaraktera+")";
+					rezultat+="("+(brojacUzastopnihKaraktera-3)+")";
 					rezultat+=unos.charAt(i);
 					brojacUzastopnihKaraktera=1;
 				}else {
@@ -60,8 +65,88 @@ public class Project {
 			brojacUzastopnihKaraktera++;
 			rezultat+=unos.charAt(i);
 		}
+			if(i==unos.length()-1) {
+				if(brojacUzastopnihKaraktera >= 3) {
+				rezultat = rezultat.substring(0, rezultat.length()-brojacUzastopnihKaraktera+3);
+				rezultat+="("+(brojacUzastopnihKaraktera-3)+")";
+				brojacUzastopnihKaraktera=1;
+				}
+			}
 		}
 		return rezultat;
+	}
+	private static String funk (List<TableObject> table,int i,String input,int freqToUpdate) {
+		String result=getCodeFromTable(table,input.charAt(i));
+		
+		//updateFrequency(input.charAt(i),table,freqToUpdate);
+		//sortTable(table);
+		//provera da li je doslo do max onda se sve freq dele sa 2 (ako je 2.5 zaokruzi na 3)
+		
+		return result;
+	}
+	private static String drugaFazaAlgoritma(String input,List<TableObject> table) {
+		
+		String result="";
+		int brojJavljanja = 1;
+		for(int i=0;i<input.length();i++) {
+		
+			if(i>0) {
+				if(input.charAt(i)==input.charAt(i-1)) {
+					brojJavljanja++;
+					
+					//ako se javio 3 puta
+					if(brojJavljanja==3) {
+						int j = i+2;
+						String broj="";
+						while(input.charAt(j)!=')') {
+							broj+=input.charAt(j);
+							j++;
+						}
+					System.out.println("broj:"+broj+"za slovo "+input.charAt(i));
+					//odstampas broj i ne updatujes tabelu za broj
+					
+					
+					//update tabelu za taj char za 3
+					result+= funk(table,i,input,3)+" ";
+					//result+= input.charAt(i)+" ";
+					result+=input.charAt(i)+"("+broj+")"+Integer.toBinaryString(Integer.valueOf(broj))+" ";
+					// povecaj i tako da se preskoci ( + broj + )
+					int brojBrojki = 1;
+					if(Integer.valueOf(broj)>=10)
+						brojBrojki = 2;
+					
+					i+=(2+brojBrojki);
+					//System.out.println(input.charAt(i));
+					}else {
+						result+=funk(table,i,input,1)+" ";
+						//result+= input.charAt(i)+" ";
+					}
+					
+				}else {
+					brojJavljanja=1;
+					result+=funk(table,i,input,1)+" ";
+					//result+= input.charAt(i)+" ";
+
+				}
+			}else {
+				result+=funk(table,i,input,1)+" ";
+				//result+= input.charAt(i)+" ";
+
+			}
+			
+	}
+
+		return result;
+	}
+	
+	private static String getCodeFromTable(List<TableObject> table, char charAt) {
+		String result="notFound";
+		for(int i=0;i<256;i++)
+			if(table.get(i).ascii == charAt) {
+				result = table.get(i).token;
+				break;
+			}
+		return result;
 	}
 
 
@@ -110,12 +195,12 @@ public class Project {
 		return table;
 	}
 
-	public static void findInTableAndUpdate(char ch,List<TableObject> table) {
+	public static void updateFrequency(char ch,List<TableObject> table,int num) {
 
 		
 		for(int i=0;i<256;i++)
 		if(table.get(i).ascii == ch) {
-			table.get(i).incFrequency();
+			table.get(i).incFrequency(num);
 		}
 
 	}

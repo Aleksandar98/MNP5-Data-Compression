@@ -16,7 +16,9 @@ public class TableObject{
 		frequency++;
 	}
 	
-
+	public void incFrequency(int num) {
+		frequency+=num;
+	}
 	public int getFrequency() {
 		return frequency;
 	}
