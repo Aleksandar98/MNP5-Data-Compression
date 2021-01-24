@@ -28,10 +28,11 @@ public class Project {
 //			findInTableAndUpdate(unos.charAt(i),table);
 //			sortTable(table);
 //		}
+		 //sortTable(table);
 
-//		for(int i=0;i<256;i++)
-//		System.out.println(table.get(i));
-		
+			for(int i=0;i<table.size();i++) 
+				System.out.println(table.get(i));
+			System.out.println("---------------");
 	}
 
 
@@ -78,8 +79,8 @@ public class Project {
 	private static String funk (List<TableObject> table,int i,String input,int freqToUpdate) {
 		String result=getCodeFromTable(table,input.charAt(i));
 		
-		//updateFrequency(input.charAt(i),table,freqToUpdate);
-		//sortTable(table);
+		updateFrequency(input.charAt(i),table,freqToUpdate);
+		sortTable(table);
 		//provera da li je doslo do max onda se sve freq dele sa 2 (ako je 2.5 zaokruzi na 3)
 		
 		return result;
@@ -107,7 +108,7 @@ public class Project {
 					
 					
 					//update tabelu za taj char za 3
-					result+= funk(table,i,input,3)+" ";
+					result+= funk(table,i,input,1)+" ";
 					//result+= input.charAt(i)+" ";
 					result+=input.charAt(i)+"("+broj+")"+Integer.toBinaryString(Integer.valueOf(broj))+" ";
 					// povecaj i tako da se preskoci ( + broj + )
@@ -207,6 +208,46 @@ public class Project {
 
 	public static void sortTable(List<TableObject> table) {
 		//replace pointers
+		List<TableObject> helpTable = new ArrayList<TableObject>();
+		for(int i=0;i<table.size();i++)
+		helpTable.add(new TableObject(table.get(i)));
+
+
+		//Collections.sort(table);
+	    int n = helpTable.size(); 
+        for (int i = 0; i < n-1; i++)
+            for (int j = 0; j < n-i-1; j++) 
+                if (helpTable.get(j).getFrequency()<helpTable.get(j+1).getFrequency())
+                { 
+                    // swap arr[j+1] and arr[j] 
+                    TableObject temp = helpTable.get(j); 
+                    helpTable.set(j, helpTable.get(j+1));
+                    helpTable.set(j+1, temp);
+                } 
+//       table.set(0, helpTable.get(0));
+//        table.set(1, helpTable.get(1));
+//        table.set(2, helpTable.get(2));
+        
+//		char newAscii = helpTable.get(0).getAscii();
+//		int newFreq = helpTable.get(0).getFrequency();
+//		table.get(0).setAscii(newAscii);
+//		table.get(0).setFrequency(newFreq);
+////		
+////	
+//		table.get(1).setAscii(helpTable.get(1).getAscii());
+//		table.get(1).setFrequency(helpTable.get(1).getFrequency());
+        
+        
+		for(int i=0;i<table.size();i++) {
+			char newAscii = helpTable.get(i).getAscii();
+			int newFreq = helpTable.get(i).getFrequency();
+			table.get(i).setAscii(newAscii);
+			table.get(i).setFrequency(newFreq);
+		}
+		
+
+//		for(int i=0;i<helpTable.size();i++) 
+//			System.out.println(helpTable.get(i));
 	}
 
 }

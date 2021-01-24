@@ -1,6 +1,6 @@
 package misos_MNP5;
 
-public class TableObject{
+public class TableObject implements Comparable<TableObject>{
 	int frequency;
 	String token;
 	char ascii;
@@ -10,6 +10,12 @@ public class TableObject{
 		this.frequency = frequency;
 		this.token = token;
 		this.ascii = ascii;
+	}
+	public TableObject(TableObject obj) {
+
+		this.frequency = obj.frequency;
+		this.token = obj.token;
+		this.ascii = obj.ascii;
 	}
 	
 	public void incFrequency() {
@@ -46,6 +52,12 @@ public class TableObject{
 	@Override
 	public String toString() {
 		return "TableObject [frequency=" + frequency + ", token=" + token + ", ascii=" + ascii + "]";
+	}
+
+	@Override
+	public int compareTo(TableObject o) {
+		// TODO Auto-generated method stub
+		return Integer.compare(frequency, o.getFrequency());
 	}
 
 	
