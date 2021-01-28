@@ -18,21 +18,20 @@ public class Project {
 
 		 String rezultatPrvog = prvaFazaAlgoritma(unos);
 		 
+		 System.out.println();
+		 
+		 System.out.println("Rezulta prvog algoritma:");
+		 
 		 System.out.println(rezultatPrvog);
 
+		 System.out.println();
+		 
 		 String rezultatDrugog = drugaFazaAlgoritma(rezultatPrvog, table);
 		 
+		 System.out.println("Rezulta drugog algoritma:");
+		 
 		 System.out.println(rezultatDrugog);
-//		for(int i=0;i<unos.length();i++) {
-//			System.out.println(unos.charAt(i)); 
-//			findInTableAndUpdate(unos.charAt(i),table);
-//			sortTable(table);
-//		}
-		 //sortTable(table);
 
-			for(int i=0;i<table.size();i++) 
-				System.out.println(table.get(i));
-			System.out.println("---------------");
 	}
 
 
@@ -82,9 +81,29 @@ public class Project {
 		updateFrequency(input.charAt(i),table,freqToUpdate);
 		sortTable(table);
 		//provera da li je doslo do max onda se sve freq dele sa 2 (ako je 2.5 zaokruzi na 3)
-		
+		if(reachedMax(table)) {
+			cutDownTable(table);
+		}
 		return result;
 	}
+	private static boolean reachedMax(List<TableObject> table) {
+		boolean reached = false;
+		for(int i=0;i<table.size();i++)
+		if(table.get(i).frequency == 256) {
+			reached = true;
+			break;
+		}
+		return reached;
+	}
+
+
+	private static void cutDownTable(List<TableObject> table) {
+		for(int i=0;i<table.size();i++)
+			table.get(i).setFrequency(table.get(i).getFrequency()/2);
+		
+	}
+
+
 	private static String drugaFazaAlgoritma(String input,List<TableObject> table) {
 		
 		String result="";
@@ -103,7 +122,7 @@ public class Project {
 							broj+=input.charAt(j);
 							j++;
 						}
-					System.out.println("broj:"+broj+"za slovo "+input.charAt(i));
+
 					//odstampas broj i ne updatujes tabelu za broj
 					
 					
@@ -142,7 +161,7 @@ public class Project {
 	
 	private static String getCodeFromTable(List<TableObject> table, char charAt) {
 		String result="notFound";
-		for(int i=0;i<256;i++)
+		for(int i=0;i<table.size();i++)
 			if(table.get(i).ascii == charAt) {
 				result = table.get(i).token;
 				break;
@@ -199,7 +218,7 @@ public class Project {
 	public static void updateFrequency(char ch,List<TableObject> table,int num) {
 
 		
-		for(int i=0;i<256;i++)
+		for(int i=0;i<table.size();i++)
 		if(table.get(i).ascii == ch) {
 			table.get(i).incFrequency(num);
 		}
@@ -224,19 +243,7 @@ public class Project {
                     helpTable.set(j, helpTable.get(j+1));
                     helpTable.set(j+1, temp);
                 } 
-//       table.set(0, helpTable.get(0));
-//        table.set(1, helpTable.get(1));
-//        table.set(2, helpTable.get(2));
-        
-//		char newAscii = helpTable.get(0).getAscii();
-//		int newFreq = helpTable.get(0).getFrequency();
-//		table.get(0).setAscii(newAscii);
-//		table.get(0).setFrequency(newFreq);
-////		
-////	
-//		table.get(1).setAscii(helpTable.get(1).getAscii());
-//		table.get(1).setFrequency(helpTable.get(1).getFrequency());
-        
+     
         
 		for(int i=0;i<table.size();i++) {
 			char newAscii = helpTable.get(i).getAscii();
@@ -244,10 +251,7 @@ public class Project {
 			table.get(i).setAscii(newAscii);
 			table.get(i).setFrequency(newFreq);
 		}
-		
 
-//		for(int i=0;i<helpTable.size();i++) 
-//			System.out.println(helpTable.get(i));
 	}
 
 }
